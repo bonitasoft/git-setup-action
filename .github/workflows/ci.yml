@@ -1,0 +1,37 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test-action:
+    name: GitHub Actions Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Create dummy file
+        run: |
+          echo 'Hello World' > test-file.txt
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
+
+      - name: Commit
+        run: |
+          git add .
+          git commit -m "Test verified commit"
+          git show --show-signature
+          git verify-commit HEAD
