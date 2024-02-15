@@ -23,15 +23,14 @@ jobs:
         run: |
           echo 'Hello World' > test-file.txt
 
-      - name: Test Local Action
+      - name: Execute local action
         id: test-action
         uses: ./
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
 
-      - name: Commit
+      - name: Test verified commit
         run: |
           git add .
           git commit -m "Test verified commit"
-          git show --show-signature
           git verify-commit HEAD

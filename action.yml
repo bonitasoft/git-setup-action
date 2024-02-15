@@ -1,14 +1,27 @@
 name: Setup Git Settings
-description: Composite GitHub Action to configure Git to sign commits with CI technical user
+description: Composite GitHub Action to configure Git to sign commits with Bonita CI technical user
+author: Bonitasoft
+
 inputs:
   keeper-secret-config:
     description: The Keeper Secret Manager configuration
     required: true
 
+outputs:
+  fingerprint:
+    description: Fingerprint of the GPG key used to sign commits
+    value: ${{ steps.import-gpg.outputs.fingerprint }}
+  name:
+    description: Name associated with the GPG key used to sign commits
+    value: ${{ steps.import-gpg.outputs.name }}
+  email:
+    description: Email address associated with the GPG key used to sign commits
+    value: ${{ steps.import-gpg.outputs.email }}
+
 runs:
   using: composite
   steps:
-    - name: Retrieve Artifactory secrets from Keeper
+    - name: Retrieve GPG secrets from Keeper
       uses: Keeper-Security/ksm-action@master
       with:
         keeper-secret-config: ${{ inputs.keeper-secret-config }}
@@ -16,7 +29,8 @@ runs:
           kE5H6L68vUluOHvClGRl9A/custom_field/gpg-private-key > env:GPG_PRIVATE_KEY
           kE5H6L68vUluOHvClGRl9A/custom_field/gpg-passphrase > env:GPG_PASSPHRASE
 
-    # commit author's name and email are set automatically with those associated to GPG key
+    # The action below automatically set commit author's name and email
+    # with those associated to the GPG key
     - name: Import GPG key
       id: import-gpg
       uses: crazy-max/ghaction-import-gpg@v6
@@ -26,11 +40,3 @@ runs:
         git_user_signingkey: true
         git_commit_gpgsign: true
         git_tag_gpgsign: true
-
-    - name: GPG user IDs
-      shell: bash
-      run: |
-        echo "fingerprint: ${{ steps.import-gpg.outputs.fingerprint }}"
-        echo "keyid:       ${{ steps.import-gpg.outputs.keyid }}"
-        echo "name:        ${{ steps.import-gpg.outputs.name }}"
-        echo "email:       ${{ steps.import-gpg.outputs.email }}"
