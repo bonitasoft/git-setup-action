@@ -22,7 +22,7 @@ runs:
   using: composite
   steps:
     - name: Retrieve GPG secrets from Keeper
-      uses: Keeper-Security/ksm-action@master
+      uses: Keeper-Security/ksm-action@v1
       with:
         keeper-secret-config: ${{ inputs.keeper-secret-config }}
         secrets: |
