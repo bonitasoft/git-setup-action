@@ -4,6 +4,10 @@ inputs:
   keeper-secret-config:
     description: The Keeper Secret Manager configuration
     required: true
+  gpg-private-key:
+    description: gpg-private-key
+  gpg-passphrase:
+    description: gpg-passphrase
 
 runs:
   using: composite
@@ -21,8 +25,10 @@ runs:
       id: import-gpg
       uses: crazy-max/ghaction-import-gpg@v6
       with:
-        gpg_private_key: ${{ env.GPG_PRIVATE_KEY }}
-        passphrase: ${{ env.GPG_PASSPHRASE }}
+        # gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+        # passphrase: ${{ secrets.GPG_PASSPHRASE }}
+        gpg_private_key: ${{ inputs.gpg-private-key }}
+        passphrase: ${{ inputs.gpg-passphrase }}
         git_user_signingkey: true
         git_commit_gpgsign: true
         git_tag_gpgsign: true
