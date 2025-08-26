@@ -29,3 +29,7 @@ jobs:
         with:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
 ```
+
+## Release new action version
+
+Release a new version of the action with the dedicated workflow [Release new action version](https://github.com/bonitasoft/git-setup-action/actions/workflows/release-new-action-version.yml).
